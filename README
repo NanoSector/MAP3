@@ -1,0 +1,18 @@
+MAP3 is a free software package that tries to provide a powerful core and a forum system in one, while providing great extensibility.
+A lot of features will be packed in the core.
+
+Once the first Beta is out, we will open up the discussion forum and show off our plans.
+
+The BSD license is located in bsd.txt.
+
+The following software packages are contained within this product:
+- Fugue Icons [http://p.yusukekamiyamane.com/]
+- jBBCode [http://jbbcode.com/]
+- SCEditor [http://sceditor.com/]
+
+Installing:
+- Copy all the files in the Source directory to your webserver.
+- Open up Settings.php with a code editor (Notepad will NOT work)
+- Change the settings so they fit your webserver.
+- In phpMyAdmin or similar, run map3.sql
+- (optional) To insert sample data, run sample_data.sql in phpMyAdmin or similar.

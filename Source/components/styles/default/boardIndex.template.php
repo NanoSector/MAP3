@@ -1,0 +1,105 @@
+<?php
+
+/** 
+ * MAP3 Software
+ * Open source forum software written in PHP 
+ *  
+ * Version: 1.0 Alpha 
+ * Developed by: Rick "Yoshi2889" and Robert "Stijllozekip" 
+ * Website: http://map3cms.co.cc 
+ *  
+ * A list of all contributors can be found on the credits page in the admin panel 
+ * 
+ * License: BSD
+ *
+*/
+
+function template_main()
+{
+        global $boards, $txt, $urls, $user;
+        
+        echo '
+        <script type="text/javascript" src="', $urls['scripts'], '/boardindex.js"></script>
+	<script type="text/javascript">
+		//<![CDATA[
+		// Just reorder the boards in the way the user has saved them.
+		$(document).ready(function()
+		{
+			reorder([', $user->details['board_order'], '], $("#sortable_categories"));
+		});
+		//]]>
+	</script>
+        <ul id="sortable_categories">';
+        foreach ($boards->categories as $category)
+        {
+        	//echo var_dump($category);
+        	if (empty($category['boards']))
+        		continue;
+        		
+                echo '
+        	<li id="', $category['id'], '">
+        	        <div class="cat_bar">', $category['name'], '</div>';
+                
+                echo '
+                	<div class="boardlist">
+                		<table class="boardIndex">';
+                
+                foreach ($category['boards'] as $board)
+                {
+                        echo '
+		        	        <tr>
+		        	        	<td width="5%" class="row_1"><div class="board_icon board_icon_old"><img src="', $urls['images'], '/board.png" alt="" /></div></td>
+		        	                <td width="50%" class="row_2">
+		        	                	<strong><a href="', $urls['script'], '?act=board&amp;boardid=', $board['board_id'], '">', $board['name'], '</a></strong><br />', $board['description'], '</td>
+		        	                <td width="5%" class="row_1" align="center">', $board['num_posts'], '<br />Posts</td>
+		        	                <td width="5%" class="row_1" align="center">', $board['num_topics'], '<br />Topics</td>
+		        	                <td width="5%" class="row_1 avatar_onboard" style="padding: 3px;">';
+					
+			if (!empty($board['last_post']) && !empty($board['last_post']['user']['avatar']))
+				echo '<img width="50px" height="50px" src="', $board['last_post']['user']['avatar'], '" alt="" /></td>';
+			elseif (!empty($board['last_post']))
+				echo '<img width="50px" height="50px" src="', $urls['images'], '/no_avatar.png" alt="" />';
+				
+			echo '
+						<td width="30%" class="row_2">';
+					
+			if (!empty($board['last_post']))
+				echo '
+							<a href="', $urls['script'], '?act=topic&amp;topicid=', $board['last_post']['topic'], '&amp;message=', $board['last_post']['message'], '">', $board['last_post']['subject'], '</a><br />
+							By <a href="', $urls['script'], '?act=profile&amp;u=1">', $board['last_post']['user']['displayname'], '</a><br />
+							', sprintf($txt['on_date'], date('D d-m-Y, g:i:s A', $board['last_post']['time']));
+			
+			echo '
+						</td>
+		        	        </tr>';
+                }
+                        
+                echo '
+               			</table>
+               		</div>
+               	</li>';
+        }
+        
+        // !!! Translate
+        echo '
+        </ul>
+        <br />
+        <div class="window">
+        	<div class="windowcontents">
+			<h3>Statistics</h3>
+		        <strong>Boards and topics</strong><br />
+		        There are 0 topics in ', count($boards->boards), ' boards, which reside in ', count($boards->categories), ' categories.
+		        <br /><br />
+		                
+		        <strong>Members</strong><br />
+		        As soon as the member system is ready, we will add statistics.
+		        <br /><br />
+		                
+		        <strong>Latest post</strong><br />
+		        There are no posts made. Get posting!
+		        <br /><br />
+		                
+		        <a href="', $urls['script'], '?act=stats">View more statistics &raquo;</a>
+	        </div>
+	</div>';
+}
